@@ -2,7 +2,7 @@
 
 
 Communication::Communication(QWidget *parent) : QWidget(parent),
-    baudRate(QSerialPort::Baud115200),
+    baudRate(QSerialPort::Baud19200),
     dataBits(QSerialPort::Data8),
     parity(QSerialPort::NoParity),
     stopBits(QSerialPort::OneStop),
@@ -89,7 +89,7 @@ void Communication::openSerial(QString serialname){
         serial->setFlowControl(flowControl);
         if ( serial->open(QIODevice::ReadWrite)) {
             QString serial_open_msg = QString(tr("Connected to %1 : %2, %3, %4, %5, %6")
-                                              .arg(serialname).arg("115200").arg("8 - data bits")
+                                              .arg(serialname).arg("19200").arg("8 - data bits")
                                               .arg("no parity").arg("one stop").arg("no flow control"));
             connect(serial, SIGNAL(readyRead()), this, SLOT(on_received_data()));
             emit serialStatus(SERIAL_OPEN_OK, serial_open_msg);
@@ -114,16 +114,27 @@ void Communication::closeSerial(){
 }
 
 void Communication::on_received_data(){
-    qDebug() << "on_received_data()";
+//    qDebug() << "on_received_data()";
     std::vector <char>temp_vector_in;
     if (serial->bytesAvailable() > 0) {
         _dane_in = serial->readAll();
         for(const auto &it : _dane_in){
+                //qDebug() << it;
+                std::cout << it;
             temp_vector_in.insert(temp_vector_in.end(), it);
             temp_vector_in.data();
+            if(it == '\n'){
+              std::cout <<"koniec <-------->"<< std::endl;
+            }
         }
-        protocol->addReceivedData(temp_vector_in);
+
+
+
+
+//        protocol->addReceivedData(temp_vector_in);
         //        parse_data(temp_vector_in);
+
+
         _dane_in.clear();
         temp_vector_in.clear();
     }

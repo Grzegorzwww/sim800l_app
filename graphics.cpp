@@ -50,6 +50,19 @@ Graphics::Graphics(Ui::MainWindow *_ui, QWidget *parent) :ui(_ui),
     ui->radioButton_serial->setChecked(true);
     on_set_serial_interface();
 
+    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_change_portname_box(int)));
+    connect(ui->pushButton_openserial, SIGNAL(clicked(bool)), this, SLOT(on_open_serial_clicked(bool)));
+    connect(ui->pushButton_closeserial, SIGNAL(clicked(bool)), this, SLOT(on_close_serial_clicked(bool)));
+
+    connect(ui->pushButton_open_udp, SIGNAL(clicked(bool)), this, SLOT(on_open_udp_clicked(bool)));
+
+    connect(ui->pushButton_close_upd, SIGNAL(clicked(bool)), this, SLOT(on_close_udp_clicked(bool)));
+
+    connect(ui->radioButton_serial, SIGNAL(clicked()), this, SLOT(on_set_serial_interface()));
+
+    connect(ui->radioButton_udp, SIGNAL(clicked()), this, SLOT(on_set_ethernet_interface()));
+
+
 
 }
 
