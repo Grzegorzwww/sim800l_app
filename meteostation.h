@@ -31,6 +31,7 @@ typedef enum
 {
     WAIT_FOR_START_CMD = 0,
     COLLECT_DATA,
+    COLLECT_START_MSG,
     COUNT_CRC
 } collect_data_statemachine_t;
 
@@ -112,6 +113,8 @@ private:
        void fillData(  data_meteo_t * raw_data);
 
        void chenge_dot_to_coma(char *c);
+
+      char buffor_data_in[400];
 
 
 

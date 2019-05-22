@@ -122,16 +122,13 @@ void Communication::on_received_data(){
         _dane_in = serial->readAll();
         for(const auto &it : _dane_in){
 
-           // qDebug() << it;
-
-
+           // qDebug() <<"dec: "<< QString::number(it, 10) <<"hex : "<<QString::number(it, 16);
 //            std::cout << std::hex<< it;
-
 //            if(it == '\n'){
 //                std::cout << std::endl;
 //            }
 
-            if(meteo_station->parse_data( it)){
+           if(meteo_station->parse_data( it)){
 
                     emit on_data_parsed_signal(meteo_station_out);
 

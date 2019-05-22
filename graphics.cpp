@@ -78,10 +78,14 @@ void Graphics::parsedDataSlot(meteo_station_data_t data)
 
     static int command_no = 0;
     ui->label_temperatura_value->setText(QString::number(data.temperature) +" "+ data.units[TEMPERATURE]);
+
+
     ui->label_dewpoint_value->setText(QString::number(data.devpoint)+" "+ data.units[DEWPOINT] );
 
 
-    ui->label_nazwa_stacji_2->setText(QString(data.type));
+    ui->label_nazwa_stacji_2->setText(data.type);
+
+//    qDebug() <<"type from qui "<< data.type;
 
 
     ui->label_command_counter_value->setText(QString::number(command_no++));
