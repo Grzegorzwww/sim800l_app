@@ -18,6 +18,8 @@ Communication::Communication(QWidget *parent) : QWidget(parent),
     protocol->connect<Communication, &Communication::decode_data>(this);
 
 
+    meteo_station = new MeteoStation(&meteo_station_out);
+
 
 }
 
@@ -114,38 +116,52 @@ void Communication::closeSerial(){
 }
 
 void Communication::on_received_data(){
-//    qDebug() << "on_received_data()";
+    //    qDebug() << "on_received_data()";
     std::vector <char>temp_vector_in;
     if (serial->bytesAvailable() > 0) {
         _dane_in = serial->readAll();
         for(const auto &it : _dane_in){
-                //qDebug() << it;
-                std::cout << it;
-            temp_vector_in.insert(temp_vector_in.end(), it);
-            temp_vector_in.data();
-            if(it == '\n'){
-              std::cout <<"koniec <-------->"<< std::endl;
+
+           // qDebug() << it;
+
+
+//            std::cout << std::hex<< it;
+
+//            if(it == '\n'){
+//                std::cout << std::endl;
+//            }
+
+            if(meteo_station->parse_data( it)){
+
+                    emit on_data_parsed_signal(meteo_station_out);
+
+//                qDebug() <<"Node" << meteo_station_out.node;
+//                qDebug() << "wind dir"<< meteo_station_out.wind_dir;
+//                qDebug() << "wind speed" << (float) meteo_station_out.wind_speed;
+//                qDebug() << "gps lati"<< meteo_station_out.gps_latitude;
+//                qDebug() << "gps long"<< meteo_station_out.gps_longitude;
+//                qDebug() << "gps heigh"<< meteo_station_out.gps_height;
+//                qDebug() << "date = "<< meteo_station_out.meteo_date.day<<":"<<meteo_station_out.meteo_date.month<<":"<<meteo_station_out.meteo_date.year;
+//                qDebug() << "time = "<< meteo_station_out.meteo_time.hours<<":"<<meteo_station_out.meteo_time.min<<":"<<meteo_station_out.meteo_time.sec;
+
+//                std::cout << "dir" << ( int)meteo_station_out.wind_dir<<std::endl;
+//               std::cout <<"wind speed" << (float)meteo_station_out.wind_speed<<std::endl;
             }
+
+
         }
 
-
-
-
-//        protocol->addReceivedData(temp_vector_in);
-        //        parse_data(temp_vector_in);
-
-
-        _dane_in.clear();
-        temp_vector_in.clear();
     }
-}
-
-
-void Communication::parse_data(std::vector<char> &data){
-    qDebug() << "parse_data";
-
+    _dane_in.clear();
 
 }
+
+
+
+
+
+
+
 void Communication::send_data(std::vector<unsigned char> &data){
     if(serial != nullptr){
         for(unsigned char byte : data){
@@ -179,26 +195,26 @@ void Communication::NadawcaDanych_dataSend(std::vector<unsigned char> &data_to_s
     }
 }
 
-void Communication::on_incomig_data_to_send(gamepad_t data, bool x){
-    if(x == SERIAL_TYPE){
-        if(serial != nullptr){
-            if(serial->isOpen()){
-                std::vector<char> temp_data(data.table_frame, data.table_frame+OUT_FRAME_SIZE);
-                //                for(int i = 0; i < OUT_FRAME_SIZE; i++){
-                protocol->codeFrame(temp_data);
-                serial->write(temp_data.data(), temp_data.size());
-                //                }
-            }
-        }
+//void Communication::on_incomig_data_to_send(gamepad_t data, bool x){
+//    if(x == SERIAL_TYPE){
+//        if(serial != nullptr){
+//            if(serial->isOpen()){
+//                std::vector<char> temp_data(data.table_frame, data.table_frame+OUT_FRAME_SIZE);
+//                //                for(int i = 0; i < OUT_FRAME_SIZE; i++){
+//                protocol->codeFrame(temp_data);
+//                serial->write(temp_data.data(), temp_data.size());
+//                //                }
+//            }
+//        }
 
-    }else if(x == UDP_TYPE){
-        if(udpSocket != nullptr){
-           // qDebug() <<"udp datagram write";
-            std::vector<char> temp_data(data.table_frame, data.table_frame+OUT_FRAME_SIZE);
-            protocol->codeFrame(temp_data);
-            writeDatagram( temp_data.data(), temp_data.size());
-        }
-    }
-}
+//    }else if(x == UDP_TYPE){
+//        if(udpSocket != nullptr){
+//           // qDebug() <<"udp datagram write";
+//            std::vector<char> temp_data(data.table_frame, data.table_frame+OUT_FRAME_SIZE);
+//            protocol->codeFrame(temp_data);
+//            writeDatagram( temp_data.data(), temp_data.size());
+//        }
+//    }
+//}
 
 

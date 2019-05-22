@@ -11,6 +11,8 @@
 #include <vector>
 #include <my_protocol.hpp>
 
+#include "meteostation.h"
+
 //#include "cdelegate.h"
 
 
@@ -42,6 +44,9 @@ public:
         listener = odb;
     }
 
+
+     MeteoStation  *meteo_station;
+
 private:
      QSerialPort *serial;
      QSerialPort::BaudRate baudRate;
@@ -59,9 +64,19 @@ private:
 
     MyProtocol *protocol;
 
+    meteo_station_data_t meteo_station_out;
+
+
+
+
+
+
+    value_types_t value_types;
+
     void decode_data(std::vector<char> frame);
 
     void onReceivedDecodedFrame(std::vector<char> frame);
+
 
 
 signals:
@@ -69,11 +84,14 @@ signals:
      void udpStatus(QString str);
 
 
+     void on_data_parsed_signal(meteo_station_data_t);
+
+
 public slots:
 
      void openSerial(QString serialname);
      void closeSerial();
-     void on_incomig_data_to_send(gamepad_t data, bool x);
+//     void on_incomig_data_to_send(gamepad_t data, bool x);
 
      void startUDP_signal(udp_param_t param);
      void stopUDP_signal(udp_param_t param);
@@ -81,7 +99,7 @@ public slots:
      void writeDatagram(const char *data, int size);
 
      void on_received_data();
-     void parse_data(std::vector<char> &data);
+
 
 };
 

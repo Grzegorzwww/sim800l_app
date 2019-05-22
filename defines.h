@@ -33,21 +33,21 @@ static const int OUT_FRAME_SIZE = 8;
 #pragma pack(push, 1)
 
 
-typedef union {
-    struct {
-        unsigned char axis_0;
-        unsigned char axis_1;
-        unsigned char axis_2;
-        unsigned char axis_3;
-        unsigned char axis_4;
-        unsigned char axis_5;
-        unsigned char buttons_msb;
-        unsigned char buttons_lsb;
-    } struct_frame;
+//typedef union {
+//    struct {
+//        unsigned char axis_0;
+//        unsigned char axis_1;
+//        unsigned char axis_2;
+//        unsigned char axis_3;
+//        unsigned char axis_4;
+//        unsigned char axis_5;
+//        unsigned char buttons_msb;
+//        unsigned char buttons_lsb;
+//    } struct_frame;
 
-    unsigned char table_frame[OUT_FRAME_SIZE];
+//    unsigned char table_frame[OUT_FRAME_SIZE];
 
-} gamepad_t;
+//} gamepad_t;
 
 
 
@@ -57,6 +57,13 @@ typedef struct {
     unsigned int in_port;
 
 } udp_param_t;
+
+
+
+#pragma pack(pop)
+
+
+
 
 
 #endif // DEFINES_H

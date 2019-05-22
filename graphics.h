@@ -12,6 +12,7 @@
 #include "defines.h"
 #include <QHostInfo>
 #include <QNetworkInterface>
+#include "meteostation.h"
 
 
 
@@ -35,7 +36,7 @@ private:
       QTextCursor textbrowser_cursor;
 
        udp_param_t udp_param;
-       gamepad_t gamepad_data;
+//       gamepad_t gamepad_data;
 
        bool interface_type;
 
@@ -52,7 +53,7 @@ signals:
       void on_udp_open_signal(udp_param_t );
       void on_udp_close_signal(udp_param_t );
 
-      void on_data_send_signal( gamepad_t, bool);
+//      void on_data_send_signal( gamepad_t, bool);
 
 
 private slots:
@@ -76,6 +77,8 @@ public slots:
       void on_change_portname_box(int index);
       void on_handle_serial_satus(SERIAL_OPEN_STATUS status, QString msg);
       void on_handle_udp_satus(QString msg);
+
+      void parsedDataSlot(meteo_station_data_t);
 
 
 

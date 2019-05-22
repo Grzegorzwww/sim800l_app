@@ -22,8 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(communication, SIGNAL(serialStatus(SERIAL_OPEN_STATUS, QString)), graphics, SLOT(on_handle_serial_satus(SERIAL_OPEN_STATUS, QString)));
-    connect(graphics, SIGNAL(on_data_send_signal(gamepad_t,bool)), communication, SLOT(on_incomig_data_to_send(gamepad_t,bool)));
+    //connect(graphics, SIGNAL(on_data_send_signal(gamepad_t,bool)), communication, SLOT(on_incomig_data_to_send(gamepad_t,bool)));
 
+
+    connect(communication, SIGNAL(on_data_parsed_signal(meteo_station_data_t)), graphics, SLOT(parsedDataSlot(meteo_station_data_t)));
 
 
 

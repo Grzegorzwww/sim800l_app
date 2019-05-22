@@ -66,13 +66,62 @@ Graphics::Graphics(Ui::MainWindow *_ui, QWidget *parent) :ui(_ui),
 
 }
 
-void Graphics::clearGamepadState(){
-    for(int i = 0; i < OUT_FRAME_SIZE; i++){
-        gamepad_data.table_frame[i] = 0;
-    }
+//void Graphics::clearGamepadState(){
+//    for(int i = 0; i < OUT_FRAME_SIZE; i++){
+////        gamepad_data.table_frame[i] = 0;
+//    }
+//}
+
+
+void Graphics::parsedDataSlot(meteo_station_data_t data)
+{
+
+    static int command_no = 0;
+    ui->label_temperatura_value->setText(QString::number(data.temperature) +" "+ data.units[TEMPERATURE]);
+    ui->label_dewpoint_value->setText(QString::number(data.devpoint)+" "+ data.units[DEWPOINT] );
+
+
+    ui->label_nazwa_stacji_2->setText(QString(data.type));
+
+
+    ui->label_command_counter_value->setText(QString::number(command_no++));
+
+    ui->label_status_value->setText(QString::number(data.status));
+
+    ui->label_start_up_value->setText(QString::number(1));
+
+    ui->label_node_value->setText(QString(data.node));
+
+    ui->label_zasilanie_value->setText(QString::number(data.supply_voltage)+" "+ data.units[SUPPLY_VOLTAGE]);
+
+    ui->label_time_value->setText(QString::number(data.meteo_time.hours)+":"+
+                                  QString::number(data.meteo_time.min)+":"+
+                                  QString::number(data.meteo_time.sec));
+
+
+    ui->label_date_value->setText(QString::number(data.meteo_date.day)+"-"+
+                                  QString::number(data.meteo_date.month)+"-"+
+                                  QString::number(data.meteo_date.year));
+
+    ui->label_label_longnitude_value->setText(QString::number(data.gps_longitude));
+
+    ui->label_latitude_value->setText(QString::number(data.gps_latitude));
+    ui->label_latitude_value->setText(QString::number(data.gps_latitude));
+    ui->label_wysokosc_value->setText(QString::number(data.gps_height));
+
+    ui->label_wind_speed_value->setText(QString::number(data.wind_speed));
+
+    ui->label_wind_dir_value->setText(QString::number(data.wind_dir));
+
+     ui->label_rh_value->setText(QString::number(data.reletive_humidity));
+
+     ui->label_press_value->setText(QString::number(data.pressure));
+
+      ui->label_speed_value->setText(QString::number(data.gps_speed));
+
+
+
 }
-
-
 
 
 void Graphics::fillPortsInfo()

@@ -32,7 +32,8 @@ SOURCES += \
         mainwindow.cpp \
     communication.cpp \
     graphics.cpp \
-    my_protocol.cpp
+    my_protocol.cpp \
+    meteostation.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,7 +41,8 @@ HEADERS += \
     communication.h \
     graphics.h \
     cdelegate.h \
-    my_protocol.hpp
+    my_protocol.hpp \
+    meteostation.h
 
 FORMS += \
         mainwindow.ui
