@@ -36,32 +36,39 @@ bool MeteoStation::parse_data(char data){
         if(data == 0x02){
             collect_data_statemachine = COLLECT_DATA;
             counter = 0;
+            return false;
         }
-        //        else if (data == 'ÿ'){
-        else if (data == (int)-1){
 
-            collect_data_statemachine = COLLECT_START_MSG;
+        if (data == (int)-1){
+            if(collect_data_statemachine != COLLECT_START_MSG )
+                collect_data_statemachine = COLLECT_START_MSG;
+            else
+                collect_data_statemachine = COLLECT_DATA;
             counter = 0;
+            return false;
         }
 
         break;
     case COLLECT_START_MSG:
 
+//        qDebug() << "COLLECT_START_MSG";
         buffor_data_in[counter++] = data;
-
-
         if(strstr( buffor_data_in, "<END OF STARTUP MESSAGE>") != NULL) {
+            data_meteo.have_units = true;
 
             temp_ptr = strstr(buffor_data_in, "MAXIMET");
             if(temp_ptr != NULL){
                 *temp_ptr += strlen("MAXIMET") - 1;
                 int copy_index = 0;
+              // *temp_ptr--;
                 while(*temp_ptr != '\n'){
                     data_meteo.type[copy_index++] = *temp_ptr++;
                 }
+                data_meteo.type[copy_index] = '\0';
             }
+
             temp_ptr = NULL;
-            temp_ptr = strstr(buffor_data_in, "STARTUP ");
+            temp_ptr = strstr(buffor_data_in, "STARTUP");
             if(temp_ptr != NULL){
                 if(strstr( temp_ptr, "OK") != NULL) {
                     data_meteo.satus = true;
@@ -78,8 +85,8 @@ bool MeteoStation::parse_data(char data){
                 copy_index = 0;
                 while(*temp_ptr++ != '\n'){
                     if(  *temp_ptr == ','){
-                        std::cout << "przecinek"<<std::endl;
                         if(value_types < CHECK){
+                            data_meteo.units[value_types][j] = '\0';
                             int temp = value_types;
                             temp++;
                             value_types = (value_types_t)temp;
@@ -93,21 +100,18 @@ bool MeteoStation::parse_data(char data){
             }
             counter = 0;
             value_types = NODE_LETTER;
+            collect_data_statemachine = COLLECT_DATA;
         }
-        counter = 0;
-        collect_data_statemachine = COLLECT_DATA;
         return 0;
-
     break;
 
     case COLLECT_DATA :
         buffor_data_in[counter++] = data;
-
         if (data == (int)-1){
             collect_data_statemachine = COLLECT_START_MSG;
             counter = 0;
+            return false;
         }
-
         if(data == '\n'){
             value_types = NODE_LETTER;
             for(i = 0; i < counter; i++){
@@ -278,14 +282,9 @@ void MeteoStation::fillData(data_meteo_t *raw_data){
         strcpy( temp_meteo_station_data->units[i], raw_data->units[i]);
     }
 
-  //   strcpy( temp_meteo_station_data->type, raw_data->type);
-     int m;
-     for(m = 0; m < strlen(raw_data->type); m++){
-         temp_meteo_station_data->type[m] = raw_data->type[m];
-           qDebug() << temp_meteo_station_data->type[m];
-     }
-  //    qDebug() <<"raw_data->type "<< raw_data->type;
-//      qDebug() <<"temperature unit "<< raw_data->units[TEMPERATURE];
+    strcpy( temp_meteo_station_data->type, raw_data->type);
+    temp_meteo_station_data->read_units_ok = data_meteo.have_units;
+
 }
 
 void MeteoStation::chenge_dot_to_coma(char *c){

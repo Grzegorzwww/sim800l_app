@@ -37,11 +37,12 @@ typedef enum
 
 
 typedef struct {
-
+    bool have_units;
     char type[100];
     bool satus;
-    char units[16][10];
+    char units[16][5];
     char values[16][50];
+
 
 } data_meteo_t;
 
@@ -63,6 +64,7 @@ typedef struct{
 
 typedef struct {
 
+    bool read_units_ok;
     char node;
     unsigned int wind_dir;
     float wind_speed;

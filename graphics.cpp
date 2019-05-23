@@ -77,16 +77,20 @@ void Graphics::parsedDataSlot(meteo_station_data_t data)
 {
 
     static int command_no = 0;
-    ui->label_temperatura_value->setText(QString::number(data.temperature) +" "+ data.units[TEMPERATURE]);
+
+    bool units = data.read_units_ok;
+
+    QString units_str;
 
 
-    ui->label_dewpoint_value->setText(QString::number(data.devpoint)+" "+ data.units[DEWPOINT] );
+    (units) ? ( units_str = " ["+ QString(data.units[TEMPERATURE])+"]") : (units_str = " ");
+     ui->label_temperatura_value->setText(QString::number(data.temperature) + units_str );
 
+
+    (units) ? ( units_str = " ["+ QString(data.units[DEWPOINT])+"]") : (units_str = " ");
+    ui->label_dewpoint_value->setText(QString::number(data.devpoint)+ units_str );
 
     ui->label_nazwa_stacji_2->setText(data.type);
-
-//    qDebug() <<"type from qui "<< data.type;
-
 
     ui->label_command_counter_value->setText(QString::number(command_no++));
 
@@ -96,7 +100,8 @@ void Graphics::parsedDataSlot(meteo_station_data_t data)
 
     ui->label_node_value->setText(QString(data.node));
 
-    ui->label_zasilanie_value->setText(QString::number(data.supply_voltage)+" "+ data.units[SUPPLY_VOLTAGE]);
+        (units) ? ( units_str = " ["+ QString(data.units[SUPPLY_VOLTAGE])+"]") : (units_str = " ");
+    ui->label_zasilanie_value->setText(QString::number(data.supply_voltage)+ units_str);
 
     ui->label_time_value->setText(QString::number(data.meteo_time.hours)+":"+
                                   QString::number(data.meteo_time.min)+":"+
@@ -113,15 +118,20 @@ void Graphics::parsedDataSlot(meteo_station_data_t data)
     ui->label_latitude_value->setText(QString::number(data.gps_latitude));
     ui->label_wysokosc_value->setText(QString::number(data.gps_height));
 
-    ui->label_wind_speed_value->setText(QString::number(data.wind_speed));
+    (units) ? ( units_str = " ["+ QString(data.units[WIND_SPEED])+"]") : (units_str = " ");
+    ui->label_wind_speed_value->setText(QString::number(data.wind_speed)+ units_str);
 
-    ui->label_wind_dir_value->setText(QString::number(data.wind_dir));
+     (units) ? ( units_str = " ["+ QString(data.units[WIND_DIR])+"]") : (units_str = " ");
+    ui->label_wind_dir_value->setText(QString::number(data.wind_dir) + units_str );
 
-     ui->label_rh_value->setText(QString::number(data.reletive_humidity));
+    (units) ? ( units_str = " ["+ QString(data.units[RELATIVE_HUMIDITY])+"]") : (units_str = " ");
+     ui->label_rh_value->setText(QString::number(data.reletive_humidity) +units_str);
 
-     ui->label_press_value->setText(QString::number(data.pressure));
+     (units) ? ( units_str = " ["+ QString(data.units[PREASSURE])+"]") : (units_str = " ");
+     ui->label_press_value->setText(QString::number(data.pressure) + units_str);
 
-      ui->label_speed_value->setText(QString::number(data.gps_speed));
+        (units) ? ( units_str = " ["+ QString(data.units[GPS_SPEED])+"]") : (units_str = " ");
+      ui->label_speed_value->setText(QString::number(data.gps_speed) + units_str);
 
 
 
