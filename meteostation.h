@@ -95,10 +95,7 @@ class MeteoStation
 public:
     MeteoStation();
     MeteoStation(meteo_station_data_t *meteo_station_data);
-
-
     bool parse_data(char data);
-
 
 
 
